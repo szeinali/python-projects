@@ -160,9 +160,38 @@ def add_all_friends(twitter, users):
     >>> users[0]['friends'][:5]
     [695023, 1697081, 8381682, 10204352, 11669522]
     """
-    ###TODO
-    pass
-
+    fp1 = open(filename,'w')
+    fp2 =  open(argList[4],'w') 
+    fp3 =  open(argList[3],'r')
+    for users in fp3:
+            
+            users = users.rstrip()
+            #print 'user= ',user
+            fp2.write(users + ',')
+            cursor = -1
+            while cursor != 0:
+                try:
+                    
+                    print ('in WHILE')
+                    time.sleep(100)
+                    response = twitter.get_friends_ids(user_id=int(users), cursor=cursor, count=5000)
+                    
+                    ids = response['ids']
+                    cursor = response['next_cursor']
+                    #print ids
+                    print cursor
+                    for x in ids:
+                    	fp2.write(str(x) + ',')
+                    if cursor == 0:
+                    	fp2.write('\n')
+                except Exception as e:
+                        print (e)
+                        print ('exception occurs for ',users)
+                        fp1.write('\nexception occurs for ' + users + '\ne')
+                       
+fp1.close()
+fp2.close()
+fp3.close()
 
 def print_num_friends(users):
     """Print the number of friends per candidate, sorted by candidate name.
