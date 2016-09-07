@@ -37,10 +37,10 @@ import sys
 import time
 from TwitterAPI import TwitterAPI
 
-consumer_key = 'fixme'
-consumer_secret = 'fixme'
-access_token = 'fixme'
-access_token_secret = 'fixme'
+consumer_key = 'qxQIYB9jB2rs1qEjdEMkuxaQ3'
+consumer_secret = '4bHc37rbou7qVu3qsX0PChee8usqAS2Sh90pGfjRVrsopEjiPB'
+access_token = '161404345-zjuqHVFHbEU85qTKxzqhPq4GRhMnsNqVkINwFCVD'
+access_token_secret = 'jndXVGzVCyG3O8nbZiJZ2bbbLHYDLPy3wwCqiBveuhSul'
 
 
 # This method is done for you. Make sure to put your credentials in the file twitter.cfg.
