@@ -66,8 +66,9 @@ def read_screen_names(filename):
     >>> read_screen_names('candidates.txt')
     ['DrJillStein', 'GovGaryJohnson', 'HillaryClinton', 'realDonaldTrump']
     """
-    ###TODO
-    pass
+    read_screen_names = open(filename)
+    result = read_screen_names.read().split()
+    return result
 
 
 # I've provided the method below to handle Twitter's rate limiting.
