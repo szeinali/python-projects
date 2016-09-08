@@ -1,49 +1,16 @@
-# coding: utf-8
-
-"""
-CS579: Assignment 0
-Collecting a political social network
-
-In this assignment, I've given you a list of Twitter accounts of 4
-U.S. presedential candidates.
-
-The goal is to use the Twitter API to construct a social network of these
-accounts. We will then use the [networkx](http://networkx.github.io/) library
-to plot these links, as well as print some statistics of the resulting graph.
-
-1. Create an account on [twitter.com](http://twitter.com).
-2. Generate authentication tokens by following the instructions [here](https://dev.twitter.com/docs/auth/tokens-devtwittercom).
-3. Add your tokens to the key/token variables below. (API Key == Consumer Key)
-4. Be sure you've installed the Python modules
-[networkx](http://networkx.github.io/) and
-[TwitterAPI](https://github.com/geduldig/TwitterAPI). Assuming you've already
-installed [pip](http://pip.readthedocs.org/en/latest/installing.html), you can
-do this with `pip install networkx TwitterAPI`.
-
-OK, now you're ready to start collecting some data!
-
-I've provided a partial implementation below. Your job is to complete the
-code where indicated.  You need to modify the 10 methods indicated by
-#TODO.
-
-Your output should match the sample provided in Log.txt.
-"""
-
-# Imports you'll need.
 from collections import Counter
 import matplotlib.pyplot as plt
 import networkx as nx
 import sys
 import time
 from TwitterAPI import TwitterAPI
+import json
 
 consumer_key = 'qxQIYB9jB2rs1qEjdEMkuxaQ3'
 consumer_secret = '4bHc37rbou7qVu3qsX0PChee8usqAS2Sh90pGfjRVrsopEjiPB'
 access_token = '161404345-zjuqHVFHbEU85qTKxzqhPq4GRhMnsNqVkINwFCVD'
 access_token_secret = 'jndXVGzVCyG3O8nbZiJZ2bbbLHYDLPy3wwCqiBveuhSul'
 
-
-# This method is done for you. Make sure to put your credentials in the file twitter.cfg.
 def get_twitter():
     """ Construct an instance of TwitterAPI using the tokens you entered above.
     Returns:
@@ -51,28 +18,22 @@ def get_twitter():
     """
     return TwitterAPI(consumer_key, consumer_secret, access_token, access_token_secret)
 
-
 def read_screen_names(filename):
     """
     Read a text file containing Twitter screen_names, one per line.
-
     Params:
         filename....Name of the file to read.
     Returns:
         A list of strings, one per screen_name, in the order they are listed
         in the file.
-
     Here's a doctest to confirm your implementation is correct.
     >>> read_screen_names('candidates.txt')
     ['DrJillStein', 'GovGaryJohnson', 'HillaryClinton', 'realDonaldTrump']
     """
     read_screen_names = open(filename)
-    result = read_screen_names.read().split()
-    return result
+    r = read_screen_names.read().split()
+    return r
 
-
-# I've provided the method below to handle Twitter's rate limiting.
-# You should call this method whenever you need to access the Twitter API.
 def robust_request(twitter, resource, params, max_tries=5):
     """ If a Twitter request fails, sleep for 15 minutes.
     Do this at most max_tries times before quitting.
@@ -94,7 +55,6 @@ def robust_request(twitter, resource, params, max_tries=5):
             sys.stderr.flush()
             time.sleep(61 * 15)
 
-
 def get_users(twitter, screen_names):
     """Retrieve the Twitter user objects for each screen_name.
     Params:
@@ -114,7 +74,11 @@ def get_users(twitter, screen_names):
     [6253282, 783214]
     """
     ###TODO
-    pass
+    request= robust_request(twitter, 'users/lookup', {'screen_name' :screen_names})
+    list = []
+    for user_list in request:
+        list.append(user_list)
+    return list
 
 
 def get_friends(twitter, screen_name):
@@ -139,7 +103,13 @@ def get_friends(twitter, screen_name):
     [695023, 1697081, 8381682, 10204352, 11669522]
     """
     ###TODO
-    pass
+    request= robust_request(twitter, 'friends/ids', {'screen_name' :screen_name})
+
+    friend_list=[]
+    for id in request:
+        friend_list.append(id)
+
+    return (sorted(friend_list))
 
 
 def add_all_friends(twitter, users):
@@ -160,38 +130,10 @@ def add_all_friends(twitter, users):
     >>> users[0]['friends'][:5]
     [695023, 1697081, 8381682, 10204352, 11669522]
     """
-    fp1 = open(filename,'w')
-    fp2 =  open(argList[4],'w') 
-    fp3 =  open(argList[3],'r')
-    for users in fp3:
-            
-            users = users.rstrip()
-            #print 'user= ',user
-            fp2.write(users + ',')
-            cursor = -1
-            while cursor != 0:
-                try:
-                    
-                    print ('in WHILE')
-                    time.sleep(100)
-                    response = twitter.get_friends_ids(user_id=int(users), cursor=cursor, count=5000)
-                    
-                    ids = response['ids']
-                    cursor = response['next_cursor']
-                    #print ids
-                    print cursor
-                    for x in ids:
-                    	fp2.write(str(x) + ',')
-                    if cursor == 0:
-                    	fp2.write('\n')
-                except Exception as e:
-                        print (e)
-                        print ('exception occurs for ',users)
-                        fp1.write('\nexception occurs for ' + users + '\ne')
-                       
-fp1.close()
-fp2.close()
-fp3.close()
+    ###TODO
+    for user in users:
+        user['friends'] = get_friends(twitter, user['screen_name'])
+
 
 def print_num_friends(users):
     """Print the number of friends per candidate, sorted by candidate name.
@@ -202,7 +144,8 @@ def print_num_friends(users):
         Nothing
     """
     ###TODO
-    pass
+    for u in users:
+        print( (u['screen_name']) + " " + str(len(u['friends'])))
 
 
 def count_friends(users):
@@ -219,7 +162,14 @@ def count_friends(users):
     [(2, 3), (3, 2), (1, 1)]
     """
     ###TODO
-    pass
+    all_friends = []
+
+    for u in users:
+        all_friends += u['friends']
+
+    friend_count = Counter(all_friends)
+
+    return friend_count
 
 
 def friend_overlap(users):
@@ -244,7 +194,24 @@ def friend_overlap(users):
     [('a', 'c', 3), ('a', 'b', 2), ('b', 'c', 2)]
     """
     ###TODO
-    pass
+    overlap_list_of_tuples = []
+    for index, u in enumerate(users):
+        for next_index, next_user in enumerate(users):
+            if index < next_index:
+                overlap_elements = overlap_list(u['friends'], next_user['friends'])
+                overlap_list_of_tuples.append( ( u['screen_name'], next_user['screen_name'], len(overlap_elements)) )
+    
+    sorted_list_of_overlap_tuples = sorted(overlap_list_of_tuples,key=lambda x: x[2], reverse=True);    
+    
+    return sorted_list_of_overlap_tuples
+
+# helper function created for code modularity
+def overlap_list(a_list, b_list):
+
+    a_multiset = Counter(a_list)
+    b_multiset = Counter(b_list)
+    
+    return list( (a_multiset & b_multiset).elements() )
 
 
 def followed_by_hillary_and_donald(users, twitter):
@@ -262,7 +229,21 @@ def followed_by_hillary_and_donald(users, twitter):
         that is followed by both Hillary Clinton and Donald Trump.
     """
     ###TODO
-    pass
+    hilary_frnd_list = []
+    donald_frnd_list = []
+
+    for u in users:
+        if 'Hillary' in str(u['screen_name']):
+            hilary_frnd_list = u['friends']
+        if 'Donald' in str(u['screen_name']):
+            donald_frnd_list = u['friends']
+
+    hilary_donald_intersect = overlap_list(hilary_frnd_list, donald_frnd_list)
+
+    request = robust_request(twitter, 'users/lookup', {'user_id' : hilary_donald_intersect})
+    twitter_handle = (json.loads(request.text))    
+
+    return str(twitter_handle[0]['screen_name'])
 
 
 def create_graph(users, friend_counts):
@@ -281,7 +262,15 @@ def create_graph(users, friend_counts):
       A networkx Graph
     """
     ###TODO
-    pass
+    graph = nx.Graph()    
+
+    for u in users:
+        graph.add_node(u['screen_name'])
+        for f in u['friends']:
+            if friend_counts[f] > 1:
+                graph.add_edge(f, u['screen_name'])     #Adding the edge only, node will be automatically added
+
+    return graph
 
 
 def draw_network(graph, users, filename):
@@ -295,7 +284,14 @@ def draw_network(graph, users, filename):
     make it look presentable.
     """
     ###TODO
-    pass
+    labels = dict()
+    for u in users:
+        labels[ u['screen_name'] ] = u['screen_name'];
+    plt.figure(figsize=(12,12))
+    pos = nx.spring_layout(graph)
+    nx.draw_networkx(graph, pos, arrows=True, with_label=True, ax=None, nodelist=graph.nodes(), edgelist=graph.edges(), node_size=80, alpha=0.5,width=0.1,labels=labels,font_size=10);
+    plt.axis('off')
+    plt.savefig(filename)
 
 
 def main():
@@ -323,5 +319,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# That's it for now! This should give you an introduction to some of the data we'll study in this course.
