@@ -32,8 +32,8 @@ def read_screen_names(filename):
     ['DrJillStein', 'GovGaryJohnson', 'HillaryClinton', 'realDonaldTrump']
     """
     read_screen_names = open(filename)
-    r = read_screen_names.read().split()
-    return r
+    read1 = read_screen_names.read().split()
+    return read1
 
 def robust_request(twitter, resource, params, max_tries=5):
     """ If a Twitter request fails, sleep for 15 minutes.
@@ -76,10 +76,10 @@ def get_users(twitter, screen_names):
     """
     ###TODO
     request= robust_request(twitter, 'users/lookup', {'screen_name' :screen_names})
-    list = []
-    for user_list in request:
-        list.append(user_list)
-    return list
+    list1 = []
+    for user_list1 in request:
+        list.append(user_list1)
+    return list1
 
 
 def get_friends(twitter, screen_name):
@@ -106,11 +106,11 @@ def get_friends(twitter, screen_name):
     ###TODO
     request= robust_request(twitter, 'friends/ids', {'screen_name' :screen_name})
 
-    friend_list=[]
+    friend_list1=[]
     for id in request:
-        friend_list.append(id)
+        friend_list1.append(id)
 
-    return (sorted(friend_list))
+    return (sorted(friend_list1))
 
 
 def add_all_friends(twitter, users):
@@ -168,9 +168,9 @@ def count_friends(users):
     for u in users:
         all_friends += u['friends']
 
-    friend_count = Counter(all_friends)
+    friend_count1 = Counter(all_friends)
 
-    return friend_count
+    return friend_count1
 
 
 def friend_overlap(users):
