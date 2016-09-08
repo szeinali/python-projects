@@ -122,8 +122,8 @@ def add_all_friends(twitter, users):
     [695023, 1697081, 8381682, 10204352, 11669522]
     """
     ###TODO
-    for user in users:
-        user['friends'] = get_friends(twitter, user['screen_name'])
+    for user1 in users:
+        user1['friends'] = get_friends(twitter, user1['screen_name'])
 
 
 def print_num_friends(users):
@@ -135,8 +135,8 @@ def print_num_friends(users):
         Nothing
     """
     ###TODO
-    for u in users:
-        print( (u['screen_name']) + " " + str(len(u['friends'])))
+    for u1 in users:
+        print( (u1['screen_name']) + " " + str(len(u1['friends'])))
 
 
 def count_friends(users):
@@ -152,12 +152,12 @@ def count_friends(users):
     [(2, 3), (3, 2), (1, 1)]
     """
     ###TODO
-    all_friends = []
+    all_friends1 = []
 
-    for u in users:
-        all_friends += u['friends']
+    for u1 in users:
+        all_friends1 += u1['friends']
 
-    friend_count1 = Counter(all_friends)
+    friend_count1 = Counter(all_friends1)
 
     return friend_count1
 
@@ -182,11 +182,11 @@ def friend_overlap(users):
     """
     ###TODO
     overlap_list_of_tuples = []
-    for index, u in enumerate(users):
+    for index, u1 in enumerate(users):
         for next_index, next_user in enumerate(users):
             if index < next_index:
-                overlap_elements = overlap_list(u['friends'], next_user['friends'])
-                overlap_list_of_tuples.append( ( u['screen_name'], next_user['screen_name'], len(overlap_elements)) )
+                overlap_elements = overlap_list(u1['friends'], next_user['friends'])
+                overlap_list_of_tuples.append( ( u1['screen_name'], next_user['screen_name'], len(overlap_elements)) )
     
     sorted_list_of_overlap_tuples = sorted(overlap_list_of_tuples,key=lambda x: x[2], reverse=True);    
     
