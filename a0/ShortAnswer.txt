@@ -9,13 +9,9 @@ Trump.
 
 How is this approach misleading? How might you fix it?
 
-
-
-
-
-
-
-
+Just because Jill Stein and Gary Johnson are following the same users does not mean they are similar.Following the same people would be their trick to fool people in order to get votes.As per the current scenario Hilary Clinton is against Donald Trump.The number cannot determine the similarity between the user.
+Fix:
+The number would be specific to the interest and we can code in such a way that the similar properties should be on various amount of factors.
 
 
 2. Looking at the output of your followed_by_hillary_and_donald function, why
@@ -39,9 +35,13 @@ information.
 Johnson follows over 3K accounts, while Donald Trump follows less than
 50). Why do you think this is? How might that affect our analysis?
 
-Every person has his/her interests to follow the entity.Gary Johnson is more active on twitter and actively participates in twitting activities whereas Donald Trump is of the other opinion.he follows less people. The relation between the follower and the followee directly depends on the complexity of the scenario.
-the more the people you follow leads to the complex relation between the entities.On the other hand the simple graph would be less complex and would simply define the realtin between each other.
-Other concern would be the people they follow.May be the person with the large following list would not pay attention to all the tweets highlighted for his concerns whereas the other one would signify the attention equally.
+Every person has his/her interests to follow the entity.Gary Johnson is more active on twitter and 
+actively participates in twitting activities whereas Donald Trump is of the other opinion.
+He follows less people. The relation between the follower and the followee directly depends on 
+the complexity of the scenario.the more the people you follow leads to the complex relation between the entities.
+On the other hand the simple graph would be less complex and would simply define the realtin between each other.
+Other concern would be the people they follow.May be the person with the large following list would not 
+pay attention to all the tweets highlighted for his concerns whereas the other one would signify the attention equally.
 
 
 
@@ -53,3 +53,10 @@ https://dev.twitter.com/rest/reference/get/friends/ids, how many requests will
 we have to make? Given how Twitter does rate limiting
 (https://dev.twitter.com/rest/public/rate-limiting), approximately how many
 minutes will it take to collect this data?
+
+
+Assuming we use the TwitterAPI, we would be making X*no of followers request.
+for eg: donald trump follows 4 users.the 4 users in turn follows 5 users.so in order to follow 5 users each Donald trump had to make 20 request.
+if we use rate limiting:
+get request takes 2 buckets 15 min for 15 calls or 15 min for 180 calls so approximately it will take 15 min for the user to request the process.
+
