@@ -39,11 +39,9 @@ information.
 Johnson follows over 3K accounts, while Donald Trump follows less than
 50). Why do you think this is? How might that affect our analysis?
 
-
-
-
-
-
+Every person has his/her interests to follow the entity.Gary Johnson is more active on twitter and actively participates in twitting activities whereas Donald Trump is of the other opinion.he follows less people. The relation between the follower and the followee directly depends on the complexity of the scenario.
+the more the people you follow leads to the complex relation between the entities.On the other hand the simple graph would be less complex and would simply define the realtin between each other.
+Other concern would be the people they follow.May be the person with the large following list would not pay attention to all the tweets highlighted for his concerns whereas the other one would signify the attention equally.
 
 
 
