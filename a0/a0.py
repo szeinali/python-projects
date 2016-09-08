@@ -4,6 +4,7 @@ import networkx as nx
 import sys
 import time
 from TwitterAPI import TwitterAPI
+import json
 
 
 consumer_key = 'qxQIYB9jB2rs1qEjdEMkuxaQ3'
