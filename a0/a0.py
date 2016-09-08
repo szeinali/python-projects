@@ -64,11 +64,8 @@ def get_users(twitter, screen_names):
     Returns:
         A list of dicts, one per user, containing all the user information
         (e.g., screen_name, id, location, etc)
-
     See the API documentation here: https://dev.twitter.com/rest/reference/get/users/lookup
-
     In this example, I test retrieving two users: twitterapi and twitter.
-
     >>> twitter = get_twitter()
     >>> users = get_users(twitter, ['twitterapi', 'twitter'])
     >>> [u['id'] for u in users]
@@ -78,26 +75,22 @@ def get_users(twitter, screen_names):
     request= robust_request(twitter, 'users/lookup', {'screen_name' :screen_names})
     list1 = []
     for user_list1 in request:
-        list.append(user_list1)
+        list1.append(user_list1)
     return list1
 
 
 def get_friends(twitter, screen_name):
     """ Return a list of Twitter IDs for users that this person follows, up to 5000.
     See https://dev.twitter.com/rest/reference/get/friends/ids
-
     Note, because of rate limits, it's best to test this method for one candidate before trying
     on all candidates.
-
     Args:
         twitter.......The TwitterAPI object
         screen_name... a string of a Twitter screen name
     Returns:
         A list of ints, one per friend ID, sorted in ascending order.
-
     Note: If a user follows more than 5000 accounts, we will limit ourselves to
     the first 5000 accounts returned.
-
     In this test case, I return the first 5 accounts that I follow.
     >>> twitter = get_twitter()
     >>> get_friends(twitter, 'aronwc')[:5]
@@ -116,15 +109,12 @@ def get_friends(twitter, screen_name):
 def add_all_friends(twitter, users):
     """ Get the list of accounts each user follows.
     I.e., call the get_friends method for all 4 candidates.
-
     Store the result in each user's dict using a new key called 'friends'.
-
     Args:
         twitter...The TwitterAPI object.
         users.....The list of user dicts.
     Returns:
         Nothing
-
     >>> twitter = get_twitter()
     >>> users = [{'screen_name': 'aronwc'}]
     >>> add_all_friends(twitter, users)
@@ -156,7 +146,6 @@ def count_friends(users):
     Returns:
         a Counter object mapping each friend to the number of candidates who follow them.
         Counter documentation: https://docs.python.org/dev/library/collections.html#collections.Counter
-
     In this example, friend '2' is followed by three different users.
     >>> c = count_friends([{'friends': [1,2]}, {'friends': [2,3]}, {'friends': [2,3]}])
     >>> c.most_common()
@@ -176,16 +165,13 @@ def count_friends(users):
 def friend_overlap(users):
     """
     Compute the number of shared accounts followed by each pair of users.
-
     Args:
         users...The list of user dicts.
-
     Return: A list of tuples containing (user1, user2, N), where N is the
         number of accounts that both user1 and user2 follow.  This list should
         be sorted in descending order of N. Ties are broken first by user1's
         screen_name, then by user2's screen_name (sorted in ascending
         alphabetical order). See Python's builtin sorted method.
-
     In this example, users 'a' and 'c' follow the same 3 accounts:
     >>> friend_overlap([
     ...     {'screen_name': 'a', 'friends': ['1', '2', '3']},
@@ -221,7 +207,6 @@ def followed_by_hillary_and_donald(users, twitter):
     Clinton and Donald Trump. You will need to use the TwitterAPI to convert
     the Twitter ID to a screen_name. See:
     https://dev.twitter.com/rest/reference/get/users/lookup
-
     Params:
         users.....The list of user dicts
         twitter...The Twitter API object
@@ -252,10 +237,8 @@ def create_graph(users, friend_counts):
         as a node.  Note: while all candidates should be added to the graph,
         only add friends to the graph if they are followed by more than one
         candidate. (This is to reduce clutter.)
-
         Each candidate in the Graph will be represented by their screen_name,
         while each friend will be represented by their user id.
-
     Args:
       users...........The list of user dicts.
       friend_counts...The Counter dict mapping each friend to the number of candidates that follow them.
@@ -278,9 +261,7 @@ def draw_network(graph, users, filename):
     """
     Draw the network to a file. Only label the candidate nodes; the friend
     nodes should have no labels (to reduce clutter).
-
     Methods you'll need include networkx.draw_networkx, plt.figure, and plt.savefig.
-
     Your figure does not have to look exactly the same as mine, but try to
     make it look presentable.
     """
