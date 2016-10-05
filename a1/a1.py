@@ -105,10 +105,10 @@ print "Height of tree is %d" %(maxDepth(root))
     node2distances[root] = 0
     node2num_paths[root] = 1
     
-    print(graph.edges())
-    print(max_depth)
-    print(root)
-    print(element)
+    #print(graph.edges())
+    #print(max_depth)
+    #print(root)
+    #print(element)
     
     while (len(element) >= 1):
         current_node = element.popleft()
