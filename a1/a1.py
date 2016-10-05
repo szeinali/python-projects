@@ -95,7 +95,7 @@ print "Height of tree is %d" %(maxDepth(root))
     node2distances = dict()
     node2num_paths = dict()
     node2parents = dict()
-    nodes_visited = dict()
+    #nodes_visited = dict()
     
     depth = 0
     
@@ -272,6 +272,11 @@ def partition_girvan_newman(graph, max_depth):
     ['D', 'E', 'F', 'G']
     """
     ###TODO
+    
+    graph_copy= graph.copy()
+    
+    return graph_copy
+    
     pass
 
 def get_subgraph(graph, min_degree):
@@ -352,12 +357,12 @@ def cut(S, T, graph):
     ###TODO
     
     total_edges = graph.number_of_edges()
-    s_graph = graph.subgraph(S)
-    s_edges = s_graph.number_of_edges()
-    t_graph = graph.subgraph(T)
-    t_edges = t_graph.number_of_edges()
+    graph_a = graph.subgraph(S)
+    edges_a = graph_a.number_of_edges()
+    graph_b = graph.subgraph(T)
+    edges_b = graph_b.number_of_edges()
                                   
-    return total_edges - s_edges - t_edges
+    return total_edges - edges_a - edges_b
     pass
 
 
