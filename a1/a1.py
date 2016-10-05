@@ -75,6 +75,63 @@ def bfs(graph, root, max_depth):
     [('B', ['D']), ('D', ['E']), ('F', ['E']), ('G', ['D', 'F'])]
     """
     ###TODO
+    
+        node= 0
+        
+        # Compute the depth of each subtree
+        leftD = maxDepth(node.left)
+        rightD = maxDepth(node.right)
+        
+        # Use the larger one
+        if (leftD > rightD):
+            return leftD+1
+        else:
+            return rightD+1
+
+
+print "Height of tree is %d" %(maxDepth(root))
+    
+    
+    node2distances = dict()
+    node2num_paths = dict()
+    node2parents = dict()
+    nodes_visited = dict()
+    
+    depth = 0
+    
+    element = deque()
+    element.append(root)
+    
+    node2distances[root] = 0
+    node2num_paths[root] = 1
+    
+    print(graph.edges())
+    print(max_depth)
+    print(root)
+    print(element)
+    
+    while (len(element) >= 1):
+        current_node = element.popleft()
+        nodes_visited[current_node] = 1
+        print('Bfs node=',current_node)
+        #print(‘nodes_visited list=‘,nodes_visited)
+        #print('Q=‘,element)
+        for edge in graph.edges() :
+            if(current_node == edge[0]):
+                visit_node = edge[1]
+            if visit_node not in nodes_visited.keys() :
+                element.append(visit_node)
+                #else :
+                #print(visit)
+                
+                if(current_node == edge[1]):
+                    visit_node = edge[0]
+                    if visit_node not in nodes_visited.keys() :
+                        element.append(visit_node)
+    #else :
+#print(visit)
+#depth = depth + 1
+return(nodes_visited)
     pass
 
 
@@ -155,6 +212,11 @@ def approximate_betweenness(graph, max_depth):
     [(('A', 'B'), 2.0), (('A', 'C'), 1.0), (('B', 'C'), 2.0), (('B', 'D'), 6.0), (('D', 'E'), 2.5), (('D', 'F'), 2.0), (('D', 'G'), 2.5), (('E', 'F'), 1.5), (('F', 'G'), 1.5)]
     """
     ###TODO
+    
+    measure = betweenness(graph, weight='weight')
+    
+    return max(measure, key=measure.get)
+    compute = girvan_newman(graph, value_edge=approximate_betweeness)
     pass
 
 
@@ -230,6 +292,18 @@ def get_subgraph(graph, min_degree):
     2
     """
     ###TODO
+    
+    degree_for_graph = graph.degree()
+    
+    nodes_to_be_removed = [n for n in degree_for_graph if (degree_for_graph[n] < min_degree) ]
+    
+    graph.remove_nodes_from(nodes_to_be_removed)
+    
+    graphdegree = Counter(nx.degree(graph).values())
+    print('no_of_edges=',len(graph.edges()))
+    return(graph)
+    
+
     pass
 
 
@@ -251,6 +325,12 @@ def volume(nodes, graph):
     4
     """
     ###TODO
+    
+    graphnode = graph.copy()
+    no_of_edges = len(graphnode.edges())
+    graphnode.remove_nodes_from(nodes)
+    no_of_edges_remain = len(graphnode.edges())
+    return no_of_edges - no_of_edges_remain
     pass
 
 
@@ -270,6 +350,14 @@ def cut(S, T, graph):
     1
     """
     ###TODO
+    
+    total_edges = graph.number_of_edges()
+    s_graph = graph.subgraph(S)
+    s_edges = s_graph.number_of_edges()
+    t_graph = graph.subgraph(T)
+    t_edges = t_graph.number_of_edges()
+                                  
+    return total_edges - s_edges - t_edges
     pass
 
 
@@ -285,6 +373,10 @@ def norm_cut(S, T, graph):
 
     """
     ###TODO
+    
+    cut_normalized = cut(S, T, graph)
+    
+    return float(cut_normalized) / volume(S, graph) + float(cut_normalized) / volume(T, graph)
     pass
 
 
@@ -306,6 +398,12 @@ def score_max_depths(graph, max_depths):
       partition_girvan_newman. See Log.txt for an example.
     """
     ###TODO
+    
+       
+    list1 = []
+    for i in max_depth:
+    print('For max depth =', i)
+    components = partition_girvan_newman(graph,i)
     pass
 
 
@@ -344,6 +442,26 @@ def make_training_graph(graph, test_node, n):
     ['F', 'G']
     """
     ###TODO
+    
+    graph = graph.copy()
+    no_cut = n
+    neighbour = sorted(graph.neighbor(test_node))
+    
+    sorted(graph.edges())
+    
+    for near_element in neighbour :
+        for edge in graph.edges() :
+            
+            if (no_cut>0) :
+                if (near_element == edge[1] and test_node == edge [0]) or (near_element == edge[0] and test_node == edge [1]):
+                    
+                    
+                    edge_to_remove = edge
+                        
+                        graph.remove_edge(*edge_to_remove)
+                            
+                            no_cut = no_cut -1
+
     pass
 
 
@@ -375,6 +493,24 @@ def jaccard(graph, node, k):
     [(('D', 'E'), 0.5), (('D', 'A'), 0.0)]
     """
     ###TODO
+    
+    high_score = []
+    neighbour_element1 = set(graph.neighbors(node))
+    for n in graph.nodes():
+        if n != node and not graph.has_edge(node, n):
+            neighbour_element2 = set(graph.neighbors(n))
+            score = 1. * (len(neighbor_element1 & neighbor_element2)) / (len(neighbor_element1 | neighbor_element2))
+            high_score.append(((node, n), score))
+    return high_score
+                    
+    compute_jaccard = jaccard(graph_traininig, test_node)
+jaccard_accuracy = 0.200
+                    
+print('jaccard accuracy=%.3f' % evaluate(compute_jaccard, subgraph, n=10))
+print('%d jaccard scores' % len(compute_jaccard))
+print('topmost 5 recommendations:')
+[x[0][1] for x in sorted(compute_jaccard, key=lambda x: x[1], reverse=True)[:5]]
+
     pass
 
 
@@ -445,6 +581,11 @@ def evaluate(predicted_edges, graph):
     0.5
     """
     ###TODO
+    
+    predicted_edges = [n[0] for n in sorted(graph, key=lambda n: n[1], reverse=True)[:p]]
+                    
+    return 1. * len([n for n in predicted_edges if graph.has_edge(*n)]) / len(predicted_edges)
+
     pass
 
 
