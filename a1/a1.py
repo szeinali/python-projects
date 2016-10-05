@@ -400,10 +400,10 @@ def score_max_depths(graph, max_depths):
     ###TODO
     
        
-    list1 = []
-    for i in max_depth:
-    print('For max depth =', i)
-    components = partition_girvan_newman(graph,i)
+    l1 = []
+    for x in max_depth:
+    print('For max depth =', x)
+    components = partition_girvan_newman(graph,x)
     pass
 
 
