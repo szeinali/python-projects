@@ -275,7 +275,35 @@ def partition_girvan_newman(graph, max_depth):
     
     graph_copy= graph.copy()
     
-    return graph_copy
+    ab=approximate_betweeness(graph, max_depth)
+    return sorted(ab.items(),key=lambda x: x[1], reverse=True)
+
+    components = [c for c in nx.connected_component_subgraphs(G)]
+    counter=0
+    while len(components) == 1:
+        remove_edge = rm[counter][0]
+        
+        G.remove_edge(*remove_edge)
+        
+        counter = counter + 1
+        components = [c for c in nx.connected_component_subgraphs(G)]
+
+    print "edges %d removed"%counter
+    print "Component size=",[len(c) for c in components]
+    
+    result=[]
+    for c in components:        
+         
+        if len(c)>max_depth:
+            result.extend(partition_girvan_newman(c))
+            
+        elif ((len(c)>=minsize) and (len(c)<=max_depth)):
+            print "Stopping for ",len(c)
+            result.append(c.nodes())
+
+return result
+    
+
     
     pass
 
