@@ -79,8 +79,8 @@ def bfs(graph, root, max_depth):
         node= 0
         
         # Compute the depth of each subtree
-        leftD = maxDepth(node.left)
-        rightD = maxDepth(node.right)
+        leftD = max_depth(node.left)
+        rightD = max_depth(node.right)
         
         # Use the larger one
         if (leftD > rightD):
@@ -89,7 +89,7 @@ def bfs(graph, root, max_depth):
             return rightD+1
 
 
-print "Height of tree is %d" %(maxDepth(root))
+print "Height of tree is %d" %(max_depth(root))
     
     
     node2distances = dict()
