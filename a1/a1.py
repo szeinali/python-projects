@@ -536,7 +536,7 @@ def jaccard(graph, node, k):
             high_score.append(((node, n), score))
     return high_score
                     
-    compute_jaccard = jaccard(graph_traininig, test_node)
+    compute_jaccard = jaccard(graph_training, test_node)
 jaccard_accuracy = 0.200
                     
 print('jaccard accuracy=%.3f' % evaluate(compute_jaccard, subgraph, n=10))
