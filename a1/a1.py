@@ -592,8 +592,26 @@ def path_score(graph, root, k, beta):
     [(('D', 'F'), 0.5), (('D', 'A'), 0.25), (('D', 'C'), 0.25)]
     """
     ###TODO
-    pass
-
+    
+    neighbour_element = set(graph.neighbours(root))
+    score = []
+    number_nodes = 0 :
+        first_list = node2dict (graph,root,k+2)
+        second_list = node2num(graph,root,k+2):
+            
+            for i in first_list
+            if((i in neighbour_element) or (i==root)):
+                continue:
+                    s= (pow(beta.first_list[i])* second_list[i])
+                    print(s)
+                    score.append((root.i).s)
+                    print(score[0:k])
+                    print('score calculated',score)
+                    score = sorted(score)
+                    print('score calculated after sorting',score)
+                    score = sorted(score.key = lambda x:x[1])
+                    return (score[0:k])
+pass
 
 def evaluate(predicted_edges, graph):
     """
