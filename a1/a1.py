@@ -148,6 +148,15 @@ def complexity_of_bfs(V, E, K):
     True
     """
     ###TODO
+    E=number_of_edges(example_graph)
+    E = len(graphnode.edges())
+    print(E)
+    V=number_of_nodes(example_graph)
+    print(V)
+    complexity= math.log(int(V)+int(E))
+    return (complexity)
+
+    
     pass
 
 
