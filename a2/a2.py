@@ -602,32 +602,30 @@ def print_top_misclassified(test_docs, test_labels, X_test, clf, n):
     Returns:
       Nothing; see Log.txt for example printed output.
     """
-    result = list()
-    length = len(test_labels)
-    index = 0
-    limit = 0
-    pred_prob = clf.predict_proba(X_test)
-    pred_res = clf.predict(X_test)
-    print()
+	result = list()
+	length = len(test_labels)
+	index =0
+	limit = 0
+	pred_prob = clf.predict_proba(X_test)
+	pred_res = clf.predict(X_test)
+	print()
 
-    while index<length:
-        if pred_res[index] != test_labels[index]:
-            tuple = {}
-            tuple['true_value'] = test_labels[index]
-            tuple['pred_res'] = pred_res[index]
-            tuple['text_detail'] = test_docs[index]
-            tuple['probability'] = pred_prob[index][pred_res[index]]
-            result.append(tuple)
-        index = index + 1
+	while index<length:
+		if pred_res[index] != test_labels[index]:
+			tuple = {}
+			tuple['true_value'] = test_labels[index]
+			tuple['pred_res'] = pred_res[index]
+			tuple['text_detail'] = test_docs[index]
+			tuple['probability'] = pred_prob[index][pred_res[index]]
+			result.append(tuple)
+		index = index + 1
 
-    # sorting result on probabilty in decending order
-    result = sorted(result, key=lambda x: -x['probability'])
+	#sorting result on probabilty in decending order
+	result = sorted(result, key=lambda x:x['probability'], reverse = True)
 
-    while limit < n:
-        print('truth=%d predicted=%d proba=%f \n %s ' % (
-        result[limit]['true_value'], result[limit]['pred_res'], result[limit]['probability'],
-        result[limit]['text_detail']))
-        limit = limit + 1
+	while limit < n:
+		print('truth=%d predicted=%d proba=%f \n %s ' % (result[limit]['true_value'], result[limit]['pred_res'], result[limit]['probability'],result[limit]['text_detail']))
+		limit = limit + 1
 
     pass
 
