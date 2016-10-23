@@ -611,7 +611,7 @@ def print_top_misclassified(test_docs, test_labels, X_test, clf, n):
     print()
 
     while index<length:
-        if pred_res[index] is not test_labels[index]:
+        if pred_res[index] != test_labels[index]:
             tuple = {}
             tuple['true_value'] = test_labels[index]
             tuple['pred_res'] = pred_res[index]
