@@ -1,3 +1,4 @@
+
 # coding: utf-8
 
 # # Assignment 3:  Recommendation systems
@@ -38,22 +39,28 @@ def tokenize(movies):
     Append a new column to the movies DataFrame with header 'tokens'.
     This will contain a list of strings, one per token, extracted
     from the 'genre' field of each movie. Use the tokenize_string method above.
-
     Note: you may modify the movies parameter directly; no need to make
     a new copy.
     Params:
       movies...The movies DataFrame
     Returns:
       The movies DataFrame, augmented to include a new column called 'tokens'.
-
     >>> movies = pd.DataFrame([[123, 'Horror|Romance'], [456, 'Sci-Fi']], columns=['movieId', 'genres'])
     >>> movies = tokenize(movies)
     >>> movies['tokens'].tolist()
     [['horror', 'romance'], ['sci-fi']]
     """
     ###TODO
+    
+    genre= []
+    for a,b in enumerate(movies.genres):
+        tokens=tokenize_string(movies.genres[a])
+        #print(tokens)
+        genre.append(tokens)
+        #print(genre)
+    movies['tokens'] = genre
+    return movies
     pass
-
 
 def featurize(movies):
     """
@@ -72,13 +79,55 @@ def featurize(movies):
 
     Params:
       movies...The movies DataFrame
-    Returns:
+    Returns_:
       A tuple containing:
       - The movies DataFrame, which has been modified to include a column named 'features'.
       - The vocab, a dict from term to int. Make sure the vocab is sorted alphabetically as in a2 (e.g., {'aardvark': 0, 'boy': 1, ...})
     """
     ###TODO
-    pass
+    
+    vocab = {}
+    occurence = {}
+    for tokens in movies['tokens']:
+        for token in tokens:
+            if token not in vocab.keys():
+                vocab.setdefault(token,-1)
+            if token not in occurence.keys():
+                occurence.setdefault(token,1)
+            else:
+                occurence[token] += 1
+     
+    vocab_list = sorted(vocab.keys(), key= lambda x: x)
+    for i,token in enumerate(vocab_list):
+            vocab[token] = i
+    #print('vocab=',sorted(vocab.items()))
+    #print('occurence=',sorted(occurence.items()))
+    
+    matrix = []
+    N = len(movies)
+    for tokens in movies['tokens']:
+        col = []
+        row = []
+        data = []
+        max_k = Counter(tokens).most_common(1)[0][1]
+        for token in tokens:
+            row.append(0)
+            col.append(vocab[token])
+            
+            tf = Counter(tokens)[token]
+            
+            tfidf = tf/max_k * math.log10(N/occurence[token])
+            data.append(tfidf)
+            
+            #print('row = ',row)
+            #print('col = ',col)
+            #print('data = ',data)
+            
+        X = csr_matrix((data,(row,col)),shape=(1,len(vocab)),dtype = np.float64)
+        matrix.append(X)
+            
+    movies['features'] = np.array(matrix)
+    return(movies,vocab)
 
 
 def train_test_split(ratings):
@@ -103,6 +152,21 @@ def cosine_sim(a, b):
       where ||a|| indicates the Euclidean norm (aka L2 norm) of vector a.
     """
     ###TODO
+ 
+    csr1 = a.data * a.data
+    X = math.sqrt(csr1.sum())
+    csr2 = b.data * b.data
+    Y =math.sqrt(csr2.sum())
+   
+    dot_AB = a.dot(b.transpose())
+    numerator = dot_AB.sum()
+    if (X!=0) | (Y!=0):
+        cosine = numerator / X * Y
+    else :
+        cosine = 0
+    #print(type (cosine))
+    return(cosine)
+    
     pass
 
 
@@ -110,17 +174,14 @@ def make_predictions(movies, ratings_train, ratings_test):
     """
     Using the ratings in ratings_train, predict the ratings for each
     row in ratings_test.
-
     To predict the rating of user u for movie i: Compute the weighted average
     rating for every other movie that u has rated.  Restrict this weighted
     average to movies that have a positive cosine similarity with movie
     i. The weight for movie m corresponds to the cosine similarity between m
-    and i.
-
+    and iprint
     If there are no other movies with positive cosine similarity to use in the
     prediction, use the mean rating of the target user in ratings_train as the
     prediction.
-
     Params:
       movies..........The movies DataFrame.
       ratings_train...The subset of ratings used for making predictions. These are the "historical" data.
@@ -128,8 +189,35 @@ def make_predictions(movies, ratings_train, ratings_test):
     Returns:
       A numpy array containing one predicted rating for each element of ratings_test.
     """
-    ###TODO
-    pass
+
+
+    predicted = list()
+    for index, row in ratings_test.iterrows():
+        test_user = row['userId']
+        predict = row['movieId']
+        a = movies[movies.movieId == predict]['features'].values[0]
+
+        wtratingsum = 0.0
+        cosinesum = 0.0
+        ratings = list()
+        for index2, train in ratings_train[ratings_train.userId == test_user].iterrows():
+            b = movies[movies.movieId == train['movieId']]['features'].values[0]
+            cosine = cosine_sim(a,b)
+            if (cosine > 0):
+                wtratingsum += train['rating'] * cosine
+                cosinesum += cosine
+
+        if (cosinesum == 0.0 and wtratingsum == 0.0):
+            train = ratings_train[ratings_train.userId == test_user]
+            allrating = train['rating']
+            predicted.append(sum(allrating) / len(allrating))
+
+        else:
+            predicted.append(wtratingsum / cosinesum)
+
+    predictedratings = np.array(predicted)
+    return predictedratings
+
 
 
 def mean_absolute_error(predictions, ratings_test):
@@ -150,7 +238,7 @@ def main():
     print(sorted(vocab.items())[:10])
     ratings_train, ratings_test = train_test_split(ratings)
     print('%d training ratings; %d testing ratings' % (len(ratings_train), len(ratings_test)))
-    predictions = make_predictions(movies, ratings_train, ratings_test)
+    predictions=make_predictions(movies, ratings_train, ratings_test)
     print('error=%f' % mean_absolute_error(predictions, ratings_test))
     print(predictions[:10])
 
