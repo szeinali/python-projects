@@ -52,6 +52,10 @@ for i in range(len(tweet)):
     else:
         tweet_neg=tweet_neg+1
 total=tweet_pos+tweet_neg
+classify_details=[len(tweet_pos),len(tweet_neg)]
+with open('classifyi', 'w') as fout:
+    json.dump(classify_details, fout)
+
 
 print("People in Support of Narendra Modi:"+str((tweet_pos*100)/total)+"%")
 print("People Against of Narendra Modi:"+str((tweet_neg*100)/total)+"%")
