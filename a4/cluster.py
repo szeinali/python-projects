@@ -8,7 +8,7 @@ def load_file():
         data = json.load(data_file)
     return data
 
-def graph_generate():
+def graph_generate(data):
     title={}
     title_list=[]
     for x in range(len(data)): 
@@ -23,6 +23,7 @@ nx.draw_networkx(graph, labels = title,edge_color='black', width = 0.001, node_s
 plot.axis("off")
 plot.show()
 plot.savefig('cluster')
+return graph
     
 def girvan_newman(graph,length):
     
@@ -52,7 +53,7 @@ def girvan_newman(graph,length):
         
 def main():
     data=load_file()
-    graph_generate()
+    graph=graph_generate(data)
     girvan_newman(graph,length)
 
 if __name__ == '__main__':
