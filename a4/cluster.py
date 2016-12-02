@@ -6,7 +6,7 @@ def load_file():
     graph = nx.Graph()
     with open('result1') as data_file:    
         data = json.load(data_file)
-
+    return data
 
 def graph_generate():
     title={}
@@ -51,7 +51,7 @@ def girvan_newman(graph,length):
     return result
         
 def main():
-    load_file()
+    data=load_file()
     graph_generate()
     girvan_newman(graph,length)
 
