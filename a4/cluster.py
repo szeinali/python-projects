@@ -26,7 +26,7 @@ def graph_generate(data):
     plot.savefig('cluster')
     return graph
     
-def girvan_newman(graph,length):
+def girvan_newman(graph):
     
     sgraph=graph.copy()
     def find_betweeness(graph):
@@ -63,7 +63,7 @@ def girvan_newman(graph,length):
 def main():
     data=load_file()
     graph=graph_generate(data)
-    girvan_newman(graph,length)
+    girvan_newman(graph)
 
 if __name__ == '__main__':
     main()
