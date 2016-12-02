@@ -46,9 +46,14 @@ def girvan_newman(graph,length):
     #components = sorted(list, key=lambda x: sorted(x.nodes())[0]) 
     #print(len(result))
     count = 0
+    average_number = 0
+    sum = 0
     for component in result:    
         print('Size of cluster %d = %d'%(count,component.order()))
         count +=1
+        sum = sum + component.order()
+    average_number = sum/len(result)
+    #print(average_number)
     return result
         
 def main():
