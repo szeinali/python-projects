@@ -58,7 +58,7 @@ def girvan_newman(graph):
     ci=[len(components),average_number]
      with open('ci', 'w') as fout:
         json.dump(ci, fout)
-    return result
+    
         
 def main():
     data=load_file()
