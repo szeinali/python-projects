@@ -54,6 +54,9 @@ def girvan_newman(graph,length):
         sum = sum + component.order()
     average_number = sum/len(result)
     #print(average_number)
+    ci=[len(components),average_number]
+     with open('ci', 'w') as fout:
+        json.dump(ci, fout)
     return result
         
 def main():
