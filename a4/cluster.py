@@ -3,12 +3,13 @@ import matplotlib.pyplot as plot
 import json
 
 def load_file():
-    graph = nx.Graph()
+    
     with open('result1') as data_file:    
         data = json.load(data_file)
     return data
 
 def graph_generate(data):
+    graph = nx.Graph()
     title={}
     title_list=[]
     for x in range(len(data)): 
@@ -19,11 +20,11 @@ def graph_generate(data):
         title_list.append(data[x]['user']['screen_name'])
     for x, y in enumerate(title_list):
         title[y]=y    
-nx.draw_networkx(graph, labels = title,edge_color='black', width = 0.001, node_size = 10)
-plot.axis("off")
-plot.show()
-plot.savefig('cluster')
-return graph
+    nx.draw_networkx(graph, labels = title,edge_color='black', width = 0.001, node_size = 10)
+    plot.axis("off")
+    plot.show()
+    plot.savefig('cluster')
+    return graph
     
 def girvan_newman(graph,length):
     
