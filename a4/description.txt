@@ -1,0 +1,21 @@
+﻿Summary:
+
+Data Collection(collect.py)-
+
+The data is collected from twitter for PM Narendra Modi.The data consists of the friends and followers of Narendra Modi, tweets that is referenced for Narendra Modi.
+The data collection is done by establishing the Twitter connection and using the twitterAPI, friends and followers are listed down for the specified person.
+The friends here depicts the users that are followed by Narendra Modi and the followers depicts the users who follow Narendra Modi.
+
+Clustering(cluster.py)-
+After the collection of the data through data.py file, a graph is formed on the basis of the users that are followed by Narendra Modi.
+The clustering of data is done on the basis of the users who are followed by Narendra Modi.
+Different clusters are formed depicting the community between the users and their interests.
+Girvan Newman algorithm is used to detect the communities and form the clusters.
+The total numbers of clusters are reflected by the algorithm.
+
+Classification(classify.py)-
+For the classification phase i.e classify.py, I have performed sentiment analysis on the tweets gathered in the data collection phase.
+The tweets are classified as positive and negative tweets. On the basis of the count for positive and negative, I calculated the percentage for the people who are in support of the Narendra Modi and the people who are against him.
+A graph is plotted depicting the same for better understanding the phase.
+
+
