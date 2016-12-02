@@ -13,20 +13,21 @@ from urllib.request import urlopen
 
 def load_file():
     with open('result2') as data_file:    
-        data = json.load(data_file)
-    return data
+        tweet = json.load(data_file)
+    return tweet
 
-url = urlopen('http://www2.compute.dtu.dk/~faan/data/AFINN.zip')
-zipfile = ZipFile(BytesIO(url.read()))
-afinn_file = zipfile.open('AFINN/AFINN-111.txt')
+def afinn_download():
+    url = urlopen('http://www2.compute.dtu.dk/~faan/data/AFINN.zip')
+    zipfile = ZipFile(BytesIO(url.read()))
+    afinn_file = zipfile.open('AFINN/AFINN-111.txt')
 
-afinn = dict()
+    afinn = dict()
 
-for line in afinn_file:
-    parts = line.strip().split()
-    if len(parts) == 2:
-        afinn[parts[0].decode("utf-8")] = int(parts[1])
-
+    for line in afinn_file:
+        parts = line.strip().split()
+        if len(parts) == 2:
+            afinn[parts[0].decode("utf-8")] = int(parts[1])
+    return afinn
 
 def afinn_sentiment2(terms, afinn, verbose=False):
     pos = 0
@@ -41,30 +42,31 @@ def afinn_sentiment2(terms, afinn, verbose=False):
                 neg += -1 * afinn[t]
     return pos, neg
 
+def sentiment_analysis(tweet,afinn)
+    tweet_pos=0
+    tweet_neg=0
+    for i in range(len(data)):
+        terms=tweet[i]['text'].split()
+        pos,neg=afinn_sentiment2(terms, afinn, verbose=False)
+        if pos>neg:
+            tweet_pos=tweet_pos+1
+        else:
+            tweet_neg=tweet_neg+1
+    total=tweet_pos+tweet_neg
+    classify_details=[len(tweet_pos),len(tweet_neg)]
+    with open('classifyi', 'w') as fout:
+        json.dump(classify_details, fout)
 
-tweet_pos=0
-tweet_neg=0
-for i in range(len(tweet)):
-    terms=tweet[i]['text'].split()
-    pos,neg=afinn_sentiment2(terms, afinn, verbose=False)
-    if pos>neg:
-        tweet_pos=tweet_pos+1
-    else:
-        tweet_neg=tweet_neg+1
-total=tweet_pos+tweet_neg
-classify_details=[len(tweet_pos),len(tweet_neg)]
-with open('classifyi', 'w') as fout:
-    json.dump(classify_details, fout)
 
-
-print("People in Support of Narendra Modi:"+str((tweet_pos*100)/total)+"%")
-print("People Against of Narendra Modi:"+str((tweet_neg*100)/total)+"%")
+    print("People in Support of Narendra Modi:"+str((tweet_pos*100)/total)+"%")
+    print("People Against of Narendra Modi:"+str((tweet_neg*100)/total)+"%")
 
 
 
 def main():
     data=load_file()
-    afinn_sentiment2(terms, afinn, verbose=False)
+    afinn=afinn_download()
+    sentiment_analysis(tweet,afinn)
 
 if __name__ == '__main__':
     main()
