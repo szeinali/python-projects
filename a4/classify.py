@@ -14,7 +14,7 @@ from urllib.request import urlopen
 def load_file():
     with open('result2') as data_file:    
         data = json.load(data_file)
-
+    return data
 
 url = urlopen('http://www2.compute.dtu.dk/~faan/data/AFINN.zip')
 zipfile = ZipFile(BytesIO(url.read()))
@@ -59,7 +59,7 @@ print("People Against of Narendra Modi:"+str((tweet_neg*100)/total)+"%")
 
 
 def main():
-    load_file()
+    data=load_file()
     afinn_sentiment2(terms, afinn, verbose=False)
 
 if __name__ == '__main__':
